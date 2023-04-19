@@ -169,7 +169,7 @@ const WitchCard = () => {
             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt="movie" />
               <div className="card-body">
                 <h5 className="card-title">{movie.original_title}</h5>
-                <p className="card-sub-title">{movie.realase_date}</p>
+                <p className="card-sub-title">{movie.vote_average}</p>
                 <button
                   className="btn btn-primary"
                   style={{ borderRadius: "20px" }}
