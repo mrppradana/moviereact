@@ -1,8 +1,46 @@
 import { Link } from "react-router-dom";
-
 import './Page.css';
+import { apiTmdb } from "../API/apiTmdb";
+import React, { useEffect, useState } from "react";
 
 function Page() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+  
+    async function handleLogin(event) {
+      event.preventDefault();
+      await apiTmdb
+        .get("authentication/token/new")
+        .then((response1) => {
+          apiTmdb
+            .post("authentication/token/validate_with_login", {
+              username: username,
+              password: password,
+              request_token: response1.data.request_token,
+            })
+            .then((response2) => {
+              apiTmdb
+                .post("authentication/session/new", {
+                  request_token: response2.data.request_token,
+                })
+                .then((response3) => {
+                  localStorage.setItem("session", JSON.stringify(response3.data.session_id));
+                  apiTmdb
+                    .get("account", {
+                      params: { session_id: response3.data.session_id },
+                    })
+                    .then((response4) => {
+                      localStorage.setItem("account", JSON.stringify(response4.data));
+                      window.location.reload();
+                      console.log(response4.data);
+                    });
+                });
+            });
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
     return (
         <div>
             <div class="container-fluid">
@@ -46,9 +84,17 @@ function Page() {
                         <div>
                         <input
                             class="form-control input_email"
-                            type="email"
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="username"
                             id="email"
-                            placeholder="Enter phone number or email address"
+                            placeholder="Enter Username"
+                        />
+                        <input
+                            class="form-control input_email"
+                            onChange={(e) => setPassword(e.target.value)} 
+                            type="password"
+                            id="email"
+                            placeholder="Enter Password"
                         />
                         </div>
                         <div
@@ -69,7 +115,7 @@ function Page() {
                         </div>
                 
                         <div class="d-flex flex-column">
-                        <button type="button" class="btn btn-warning mt_24 btn_signin">
+                        <button class="btn btn-warning mt_24 btn_signin" onClick={(e) => handleLogin(e)} type="submit">
                             Sign In
                         </button>
                         <button type="button" class="btn btn-link mt_24 btn_signup">
