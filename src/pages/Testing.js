@@ -159,45 +159,40 @@ const WitchCard = () => {
   }, []);
   return (
     <>
-      <div
-        className="row"
-        style={{ marginTop: "10px", marginLeft: "5%", marginRight: "5%" }}
-      >
+      <div className="row" style={{ marginTop: "10px", marginLeft: "5%", marginRight: "5%" }}>
         {filmPopular.map((movie, index)=>{
           console.log(movie);
           return(
+            // card
             <div className="col-12 col-md-6 col-lg-3" key={index}>
             <div className="card" style={{ border: "none" }}>
             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="card-img-top" alt="movie" />
               <div className="card-body">
                 <h5 className="card-title">{movie.original_title}</h5>
-                <p className="card-sub-title">New Series</p>
+                <p className="card-sub-title">{movie.realase_date}</p>
                 <button
                   className="btn btn-primary"
                   style={{ borderRadius: "20px" }}
                   data-bs-toggle="modal"
-                  data-bs-target="#product1"
+                  data-bs-target={`#modal${movie.id}`}
                 >
                   watch now!
                 </button>
               </div>
             </div>
-          </div>
-          )
-        })}
-      </div>
-      <div
+          {/* modal */}
+          <div
         className="modal fade"
-        id="product1"
+        id={`modal${movie.id}`}
         tabIndex="-1"
-        aria-labelledby="product1Label"
+        aria-labelledby={`modalLabel${movie.id}`}
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Witch From Mercury
+              {movie.original_title}
               </h1>
               <button
                 type="button"
@@ -207,23 +202,10 @@ const WitchCard = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <iframe
-                width="560"
-                height="315"
-                src="https://www.youtube.com/embed/bQjXXzdEnMw?controls=0"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
+            <img src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`} className="card-img-top" alt="movie" />
             </div>
             <div className="text-modal">
-              An era when a multitude of corporations have entered space and
-              built a huge economic system. After transferring to the Asticassia
-              School of Technology from the planet Mercury, Suletta Mercury has
-              experienced a school life filled with encounters and excitement,
-              as both Miorine Rembran's bridegroom and a member of GUNDAM-ARM,
-              Inc.
+            {movie.overview}
             </div>
             <div className="modal-footer">
               <button
@@ -241,6 +223,10 @@ const WitchCard = () => {
             </div>
           </div>
         </div>
+      </div>
+          </div>
+          )
+        })}
       </div>
     </>
   );
